@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",                  // JavaScript version to compile to
+    "module": "ES6",                     // Module system to use (ES6 modules)
+    "declaration": true,                 // Generate .d.ts declaration files
+    "outDir": "dist",                    // Output directory for compiled files
+    "strict": true,                      // Enable all strict type-checking options
+    "sourceMap": true,                   // Generate source maps
+    "moduleResolution": "node",          // Module resolution strategy
+    "esModuleInterop": true,             // Enables compatibility with CommonJS modules
+    "forceConsistentCasingInFileNames": true,  // Disallow inconsistently cased references
+    "skipLibCheck": true,                 // Skip type checking of declaration files
+    "importHelpers": true
+  },
+  "include": ["src/**/*"]                // Include all TypeScript files in the src directory
+}
