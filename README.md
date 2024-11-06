@@ -34,8 +34,6 @@ A lightweight utility for implementing PKCE (Proof Key for Code Exchange) with A
 - **Easy Integration**: Simplifies the implementation of OAuth 2.0 Authorization Code Flow with PKCE in web applications.
 - **Secure**: Uses high-entropy cryptographic random strings and SHA-256 hashing to enhance security.
 - **Lightweight**: Minimal dependencies for ease of use and performance.
-- **TypeScript Support**: Includes TypeScript definitions for type safety and better development experience.
-- **Schema Validation**: Validates responses using Zod schemas to ensure data integrity.
 
 ## Installation
 
