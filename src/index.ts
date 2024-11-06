@@ -3,13 +3,7 @@ import {
   generateNonce, 
   sha256,
 } from "./crypto.utils";
-
-import {
-  Auth,
-  authSchema,
-} from "./schemas";
-
-import { flattenIssues } from "./zod.utils";
+import { Auth, validateAuth } from "./validation";
 
 /**
  * Represents the PKCE challenge data required for the OAuth 2.0 authorization code flow with Proof Key for Code Exchange (PKCE).
@@ -183,13 +177,7 @@ export const exchangeCode = async ({
     throw new Error(`Error exchanging code: ${JSON.stringify(rawData)}`);
   }
 
-  const parsing = authSchema.safeParse(rawData);
-  if (parsing.error) {
-    const issues = flattenIssues(parsing.error.issues)
-    throw new Error(`Returned auth data does not conform to schema: ${issues}`)
-  }
-
-  return parsing.data
+  return validateAuth(rawData);
 };
 
 /**
