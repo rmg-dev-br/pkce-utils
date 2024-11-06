@@ -1,6 +1,7 @@
 const typescript = require('@rollup/plugin-typescript');
 const { nodeResolve } = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
+const copy = require('rollup-plugin-copy');
 
 module.exports = [
   {
@@ -22,6 +23,12 @@ module.exports = [
       nodeResolve(),
       commonjs(),
       typescript({ tsconfig: './tsconfig.json' }),
+      copy({
+        targets: [
+          // To allow for source maps
+          { src: 'src/**/*.ts', dest: 'dist/src' },
+        ],
+      }),
     ],
   },
 ];
