@@ -11,12 +11,29 @@ import {
 
 import { flattenIssues } from "./zod.utils";
 
+/**
+ * Represents the PKCE challenge data required for the OAuth 2.0 authorization code flow with Proof Key for Code Exchange (PKCE).
+ */
 export type Challenge = {
+  /**
+   * A random string used to maintain state between the request and callback to prevent CSRF attacks.
+   */
   state: string,
+  /**
+   * A high-entropy cryptographic random string used to generate the code challenge.
+   */
   codeVerifier: string,
+  /**
+   * The code challenge derived from the code verifier, sent to the authorization server.
+   */
   codeChallenge: string
 }
 
+/**
+ * Generates a PKCE code challenge and state parameter for the OAuth 2.0 authorization code flow.
+ *
+ * @returns {Promise<Challenge>} A promise that resolves to a `Challenge` object containing the state, code verifier, and code challenge.
+ */
 export const getChallenge = async (): Promise<Challenge> => {
   const [state, codeVerifier] = await Promise.all([
     generateNonce(),
@@ -32,21 +49,51 @@ export const getChallenge = async (): Promise<Challenge> => {
   };
 };
 
+/**
+ * Parameters required to construct the authorization request URL and redirect the user to the identity provider's login page.
+ */
 export type RedirectToLogin = {
+  /**
+   * The base URL of the identity provider (IdP).
+   */
   idpUrl: string,
+  /**
+   * The client identifier issued to the client during the registration process.
+   */
   clientId: string,
+  /**
+   * The URI to which the response will be sent after authorization.
+   */
   redirectUri: string,
+  /**
+   * The path to the authorization endpoint at the identity provider. Defaults to '/login'.
+   */
   path?: string,
+  /**
+   * The scope of the access request. Defaults to 'openid'.
+   */
   scope?: string,
 }
 
+/**
+ * Initiates the OAuth 2.0 authorization code flow by redirecting the user to the identity provider's login page with the appropriate query parameters.
+ *
+ * @param {RedirectToLogin} params - The parameters required to build the authorization request URL.
+ * @param {string} params.idpUrl - The base URL of the identity provider (IdP).
+ * @param {string} params.clientId - The client identifier issued to the client during the registration process.
+ * @param {string} params.redirectUri - The URI to which the response will be sent after authorization.
+ * @param {string} [params.path='/login'] - The path to the authorization endpoint at the identity provider.
+ * @param {string} [params.scope='openid'] - The scope of the access request.
+ *
+ * @returns {Promise<void>} A promise that resolves when the redirect has been initiated.
+ */
 export const redirectToLogin = async ({
   idpUrl,
   clientId,
   redirectUri,
   path = '/login',
   scope = 'openid'
-}: RedirectToLogin) => {
+}: RedirectToLogin): Promise<void> => {
   const { 
     state, 
     codeVerifier, 
@@ -69,14 +116,46 @@ export const redirectToLogin = async ({
   window.location.href = url.toString();
 }
 
+/**
+ * Parameters required to exchange an authorization code for an access token.
+ */
 export type ExchangeCode = {
+  /**
+   * The authorization code received from the authorization server.
+   */
   code: string,
+  /**
+   * The code verifier used in the PKCE flow to generate the code challenge.
+   */
   codeVerifier: string,
+  /**
+   * The base URL of the identity provider (IdP).
+   */
   idpUrl: string,
+  /**
+   * The client identifier issued to the client during the registration process.
+   */
   clientId: string,
+  /**
+   * The URI to which the response was sent after authorization.
+   */
   redirectUri: string
 }
 
+/**
+ * Exchanges the authorization code for an access token by making a POST request to the identity provider's token endpoint.
+ *
+ * @param {ExchangeCode} params - The parameters required to perform the token exchange.
+ * @param {string} params.code - The authorization code received from the authorization server.
+ * @param {string} params.codeVerifier - The code verifier used in the PKCE flow.
+ * @param {string} params.idpUrl - The base URL of the identity provider (IdP).
+ * @param {string} params.clientId - The client identifier issued to the client during the registration process.
+ * @param {string} params.redirectUri - The URI to which the response was sent after authorization.
+ *
+ * @returns {Promise<Auth>} A promise that resolves to an `Auth` object containing the access token and other authentication data.
+ *
+ * @throws Will throw an error if the token exchange fails or the returned data does not conform to the expected schema.
+ */
 export const exchangeCode = async ({
   code,
   codeVerifier,
@@ -113,12 +192,36 @@ export const exchangeCode = async ({
   return parsing.data
 };
 
+/**
+ * Parameters required to handle the OAuth 2.0 callback and exchange the authorization code for tokens.
+ */
 export type handleCallback = {
+  /**
+   * The base URL of the identity provider (IdP).
+   */
   idpUrl: string,
+  /**
+   * The client identifier issued to the client during the registration process.
+   */
   clientId: string,
+  /**
+   * The URI to which the response was sent after authorization.
+   */
   redirectUri: string
 }
 
+/**
+ * Handles the OAuth 2.0 callback by extracting the authorization code and state from the URL, retrieving the code verifier from session storage, and exchanging the code for tokens.
+ *
+ * @param {handleCallback} params - The parameters required to handle the callback.
+ * @param {string} params.idpUrl - The base URL of the identity provider (IdP).
+ * @param {string} params.clientId - The client identifier issued to the client during the registration process.
+ * @param {string} params.redirectUri - The URI to which the response was sent after authorization.
+ *
+ * @returns {Promise<Auth>} A promise that resolves to an `Auth` object containing the access token and other authentication data.
+ *
+ * @throws Will throw an error if the state or code is missing from the URL, the code verifier is missing from session storage, or the token exchange fails.
+ */
 export const handleCallback = async ({
   idpUrl,
   clientId,
