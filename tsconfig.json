@@ -9,8 +9,9 @@
     "moduleResolution": "node",          // Module resolution strategy
     "esModuleInterop": true,             // Enables compatibility with CommonJS modules
     "forceConsistentCasingInFileNames": true,  // Disallow inconsistently cased references
-    "skipLibCheck": true,                 // Skip type checking of declaration files
-    "importHelpers": true
+    "skipLibCheck": true,                // Skip type checking of declaration files
+    "importHelpers": true,
+    "sourceRoot": "./"            // Set the root path for source maps
   },
   "include": ["src/**/*"]                // Include all TypeScript files in the src directory
 }
