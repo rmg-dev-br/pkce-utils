@@ -1,7 +1,9 @@
 {
   "name": "@rmg-dev/pkce-utils",
   "description": "A lightweight utility for implementing PKCE (Proof Key for Code Exchange) with Auth UI, designed for easy integration and secure OAuth flows",
-  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "1.0.0",
   "main": "dist/index.umd.js",
   "module": "dist/index.esm.js",
