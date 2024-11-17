@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "dist/pkce-utils.umd.js",
   "module": "dist/pkce-utils.esm.js",
   "types": "dist/index.d.ts",

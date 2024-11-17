@@ -149,8 +149,13 @@ export const redirectToLogout = ({
   clientId,
   logoutUri,
 }: RedirectToLogout): void => {
-  const logoutUrl = `${idpUrl}${path}?client_id=${clientId}&logout_uri=${logoutUri}`;
-  window.location.href = logoutUrl;
+  const url = new URL(path, idpUrl)
+  url.search = new URLSearchParams({
+    client_id: clientId,
+    logout_uri: logoutUri,
+  }).toString();
+
+  window.location.href = url.toString();
 };
 
 /**
