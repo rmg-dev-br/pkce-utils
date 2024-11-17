@@ -110,6 +110,23 @@ export const redirectToLogin = async ({
   window.location.href = url.toString();
 }
 
+export type RedirectToLogout = {
+  idpUrl: string,
+  path?: string,
+  clientId: string,
+  logoutUri: string,
+}
+
+export const redirectToLogout = ({
+  idpUrl,
+  path = '/logout',
+  clientId,
+  logoutUri,
+}: RedirectToLogout) => {
+  const logoutUrl = `${idpUrl}${path}?client_id=${clientId}&logout_uri=${logoutUri}`
+  window.location.href = logoutUrl;
+}
+
 /**
  * Parameters required to exchange an authorization code for an access token.
  */
