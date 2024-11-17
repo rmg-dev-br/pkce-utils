@@ -110,22 +110,48 @@ export const redirectToLogin = async ({
   window.location.href = url.toString();
 }
 
+/**
+ * Parameters required to construct the logout request URL and redirect the user to the identity provider's logout endpoint.
+ */
 export type RedirectToLogout = {
+  /**
+   * The base URL of the identity provider (IdP).
+   */
   idpUrl: string,
+  /**
+   * The path to the logout endpoint at the identity provider. Defaults to '/logout'.
+   */
   path?: string,
+  /**
+   * The client identifier issued to the client during the registration process.
+   */
   clientId: string,
+  /**
+   * The URI to which the user should be redirected after a successful logout.
+   */
   logoutUri: string,
-}
+};
 
+/**
+ * Initiates the logout process by redirecting the user to the identity provider's logout endpoint with the appropriate query parameters.
+ *
+ * @param {RedirectToLogout} params - The parameters required to build the logout request URL.
+ * @param {string} params.idpUrl - The base URL of the identity provider (IdP).
+ * @param {string} [params.path='/logout'] - The path to the logout endpoint at the identity provider.
+ * @param {string} params.clientId - The client identifier issued to the client during the registration process.
+ * @param {string} params.logoutUri - The URI to which the user should be redirected after a successful logout.
+ *
+ * @returns {void} Redirects the user agent to the logout URL.
+ */
 export const redirectToLogout = ({
   idpUrl,
   path = '/logout',
   clientId,
   logoutUri,
-}: RedirectToLogout) => {
-  const logoutUrl = `${idpUrl}${path}?client_id=${clientId}&logout_uri=${logoutUri}`
+}: RedirectToLogout): void => {
+  const logoutUrl = `${idpUrl}${path}?client_id=${clientId}&logout_uri=${logoutUri}`;
   window.location.href = logoutUrl;
-}
+};
 
 /**
  * Parameters required to exchange an authorization code for an access token.
